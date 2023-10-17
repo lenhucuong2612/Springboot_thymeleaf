@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" href="/shop/css/chitietdonhang.css">
+    <link rel="stylesheet" href="/shop/css/main.css">
+    <title>Payment order</title>
+</head>
+
+<body>
+<div id="header">
+    <div th:replace="fragment :: header_top"></div>
+    <div th:replace="fragment :: header_middle"></div>
+    <div class="header_bottom">
+        <div class="title_page">
+            <div class="title_page-overlay"></div>
+            <div class="wrapper">
+                <ul th:replace="fragment::menu">
+
+                </ul>
+                <div th:replace="fragment::title_page-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Phần giữa -->
+<div class="container">
+    <div class="wrapper">
+        <header>
+            <div class="header_title">
+                <h2>Tài khoản của bạn</h2>
+            </div>
+        </header>
+        <main>
+            <div id="container">
+                <div class="container-wrap">
+                    <div class="container_main">
+                        <div class="container_main-left">
+                            <div class="link_account">
+                                <a href="">Trở về tài khoản</a>
+                            </div>
+                            <div class="information_order">
+                                <div class="order_title"><span>Đơn hàng:</span><a href="#" th:text="${order.maHang}"></a></div>
+                                <div class="order_date">Ngày: <span th:text="${order.orderDate}"></span></div>
+                            </div>
+                            <table border="1px" cellspacing="0" class="order_details">
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Mã</th>
+                                    <th>Số lượng </th>
+                                    <th>Đơn giá </th>
+                                    <th>Tổng tiền </th>
+                                </tr>
+                                <tr th:each="orderDetailList:${orderDetail}">
+                                    <td class="product_name" th:text="${orderDetailList.product.name}"></td>
+                                    <td class="product_code" th:text="${orderDetailList.product.ISBN}"></td>
+                                    <td class="product_code" th:text="${orderDetailList.size}"></td>
+                                    <td class="product_price" th:text="${#numbers.formatDecimal(orderDetailList.product.salePrice, 0, 'COMMA', 0, 'POINT')}+'đ'"></td>
+                                    <td class="product_price" th:text="${#numbers.formatDecimal(orderDetailList.product.salePrice+orderDetailList.size, 0, 'COMMA', 0, 'POINT')}+'đ'"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">Tổng tiền</td>
+                                    <td th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')}+'đ'"></td>
+                                </tr>
+                                <tr th:if="${user.department eq 'Hà Nội'}">
+                                    <td colspan="4">Vân chuyển(Vận chuyển nội thành Hà Nội - 25.000 VND; Huyện xã - 35.000 VND)</td>
+                                    <td>25,000đ</td>
+                                </tr>
+                                <tr th:unless="${user.department eq 'Hà Nội'}">
+                                    <td colspan="4">Vân chuyển(Vận chuyển nội thành Hà Nội - 25.000 VND; Huyện xã - 35.000 VND)</td>
+                                    <td>35,000đ</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">Tổng so san pham</td>
+                                    <td th:text="${order.quantity}"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">Trạng thái vận chuyển</td>
+                                    <td>Chờ xử lý</td>
+                                </tr>
+                                <tr th:if="${user.department eq 'Hà Nội'}">
+                                    <th colspan="4">Tổng tiền</th>
+                                    <th th:text="${#numbers.formatDecimal(order.totalPrice + 25000, 0, 'COMMA', 0, 'POINT')}+'đ'"></th>
+                                </tr>
+                                <tr th:unless="${user.department eq 'Hà Nội'}">
+                                    <th colspan="4">Tổng tiền</th>
+                                    <th th:text="${#numbers.formatDecimal(order.totalPrice + 35000 , 0, 'COMMA', 0, 'POINT')}+'đ'"></th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="container_main-right">
+                            <h3 class="payment_address">Địa chỉ thanh toán</h3>
+                            <div class="payment_status"><b>Tình trạng thanh toán:</b>Chờ xử lý</div>
+                            <div class="payment_user"><span th:text="${fullName}"></span></div>
+                            <div class="delivery_address">
+                                <div class="delivery_address-title">Địa chỉ nhận hàng</div>
+                                <div><span th:text="${user.department}"></span></div>
+                                <div><span th:text="${user.country}"></span></div>
+                                <div><span th:text="${user.phoneNumber}"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<!-- Hết phần giữa -->
+
+<!-- Phần footer -->
+<div th:replace="fragment :: footer"></div>
+<!-- Hết phần footer -->
+<!-- Phần btn để click vào sẽ về đầu trang -->
+<div id="backtop"><i class="fa-solid fa-chevron-up"></i></div>
+<!-- Phần form đăng ký đăng nhập -->
+
+<div class="overlay d-none"></div>
+
+
+</body>
+<!-- import slick slider -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</html>

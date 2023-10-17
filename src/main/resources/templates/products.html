@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/shop/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/shop/css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        li{
+            list-style: none;
+        }
+        .form-inline{
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="fragment::sidebar_right-admin"></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="fragment::navabr_header-admin"></nav>
+            <!-- End of Topbar -->
+
+            <div class="container-fluid">
+
+                <a th:href="@{/admin/products/add}" style="margin: 20px 0" class="btn btn-primary">Add Product</a>
+                <form class="form-inline" th:action="@{/page/1}">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" name="keyword" th:value="${keyword}" required />
+                    &nbsp;
+                    <button class="btn btn-success" type="submit">Search</button>
+                    &nbsp;
+                    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+                </form>
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">SN</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">SKU</th>
+                        <th scope="col">ISBN</th>
+                        <th scope="col">Preview</th>
+                        <th scope="col">Delete</th>
+                        <th scope="col">Update</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="product,status : ${products}">
+                        <th scope="row" th:text="${status.index+1}">1</th>
+                        <td th:text="${product.name}">Larry</td>
+                        <td th:text="${product.category.name}">Larry</td>
+                        <td th:text="${product.SKU}">Larry</td>
+                        <td th:text="${product.ISBN}">Larry</td>
+                        <td><img height="100px" width="100px" th:src="@{/productImages/{imageName}(imageName=${product.imageName})}"></td>
+                        <td><a href="" th:href="@{/admin/product/delete/{id}(id=${product.id})}" class="btn btn-danger">Delete</a></td>
+                        <td><a href="" th:href="@{/admin/product/update/{id}(id=${product.id})}" class="btn btn-warning">Update</a></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="container">
+                    <h4>Phân trang</h4>
+                    <div class="pagination">
+                        <ul class="page-list" style="display: flex">
+                            <li class="page-item">
+                                <a class="page-link" th:if="${currentPage > 1}" th:href="@{(${keyword != null and keyword != '' ? '/page/' + (currentPage - 1) + '?keyword=' + keyword : '/page/' + (currentPage - 1)})}">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                <a class="page-link" th:href="@{(${keyword != null && keyword != '' ? '/page/' + i + '?keyword=' + keyword : '/page/' + i})}">
+                                    <span th:if="${currentPage != i}" th:text="${i}"></span>
+                                    <span th:unless="${currentPage != i}"><strong th:text="${i}"></strong></span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" th:if="${currentPage <totalPages}" th:href="@{'/page/'+${currentPage+1}}">
+                                    <span>Next</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" th:if="${currentPage <totalPages}" th:href="@{'/page/'+${totalPages}}">
+                                    <span>Last</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer th:replace="fragment::footer-admin"></footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragment::logoutModal"></div>
+<!-- Bootstrap core JavaScript-->
+<script src="/shop/vendor/jquery/jquery.min.js"></script>
+<script src="/shop/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/shop/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/shop/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/shop/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/shop/js/demo/chart-area-demo.js"></script>
+<script src="/shop/js/demo/chart-pie-demo.js"></script>
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/admin/products}]]";
+    }
+</script>
+</body>
+</html>
+

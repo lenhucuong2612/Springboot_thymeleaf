@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" href="/shop/css/order.css">
+    <link rel="stylesheet" href="/shop/css/main.css">
+    <title>Payment order</title>
+</head>
+
+<body>
+<!-- Phần giữa -->
+<div id="container">
+    <div class="wrapper">
+        <form th:action="@{/shop/user/save_order}" id="form-order" method="POST">
+        <div class="container-main-order">
+            <div class="container-main-order-left">
+                    <div class="container-main-order-left-wrap">
+                        <h1 class="title">
+                            Nhà xuất bản Kim Đồng
+                        </h1>
+                        <ul class="link_cart">
+                            <li><a th:href="@{/shop/cart}">Giỏ hàng</a></li>
+                            <li><i class="fa-solid fa-angle-right"></i></li>
+                            <li class="active">Thông tin vận chuyển</li>
+                            <li><i class="fa-solid fa-angle-right"></i></li>
+                            <li>Phương thức thanh toán</li>
+                        </ul>
+                        <div class="payment_infor">
+                            <h3 class="payment_infor-title">
+                                Thông tin thanh toán
+                            </h3>
+                            <div class="payment_infor-user">
+                                <div class="user_avata"><i class="fa-regular fa-user"></i></div>
+                                <div class="payment_infor-user-infor">
+                                    <div class="user_name" >
+                                        <span th:text="${fullName}"></span>
+                                        <span th:text="'('+${user.email}+')'"></span>
+                                    </div>
+                                    <div class="user_logout"><a th:href="@{/logout}">Đăng xuất</a></div>
+                                </div>
+                            </div>
+                            <div class="add-address-new">
+                                <label class="add-address-new-label">Thêm địa chỉ...</label>
+                                <select class="add-address-new-options" name="country">
+                                    <option>70000,VietNam</option>
+                                </select>
+                            </div>
+                            <div class="payment_infor-name">
+                                <label class="payment_infor-name-label">Họ và tên</label>
+                                <input class="payment_infor-name-input" type="text" th:value="${fullName}" name="name">
+                            </div>
+                            <div class="payment_infor-phone" th:if="${user.phoneNumber!=null}">
+                                <label class="payment_infor-phone-label">Số điện thoại</label>
+                                <input class="payment_infor-phone-input" type="number" name="phoneNumber" th:value="${user.phoneNumber}">
+                            </div>
+                            <div class="payment_infor-phone" th:if="${user.phoneNumber==null}">
+                                <label class="payment_infor-phone-label">Số điện thoại</label>
+                                <input class="payment_infor-phone-input" type="number" name="phoneNumber">
+                            </div>
+                            <div class="payment_infor-province" th:if="${user.department==null}">
+                                <label for="" class="payment_infor-province-label">Tỉnh</label>
+                                <input type="text" class="payment_infor-province-input" id="province" name="department" />
+                            </div>
+                            <div class="payment_infor-province" th:if="${user.department!=null}">
+                                <label for="" class="payment_infor-province-label">Tỉnh</label>
+                                <input type="text" class="payment_infor-province-input" id="province" th:value="${user.department}" name="department" />
+                            </div>
+                            <div class="payment_infor-district" th:if="${user.districts==null}">
+                                <label for="" class="payment_infor-district-label">Quận/Huyện</label>
+                                <input type="text" class="payment_infor-district-input" id="district" name="districts" />
+                            </div>
+                            <div class="payment_infor-district" th:if="${user.districts!=null}">
+                                <label for="" class="payment_infor-district-label">Quận/Huyện</label>
+                                <input type="text" class="payment_infor-district-input" id="district" th:value="${user.districts}" name="districts" />
+                            </div>
+                            <div class="payment_infor-wards" th:if="${user.ward==null}">
+                                <label for="" class="payment_infor-wards-label">Phường/Xã</label>
+                                <input type="text" class="payment_infor-wards-input" id="ward" name="ward" />
+                            </div>
+                            <div class="payment_infor-wards" th:if="${user.ward!=null}">
+                                <label for="" class="payment_infor-wards-label">Phường/Xã</label>
+                                <input type="text" class="payment_infor-wards-input" id="ward" name="ward" th:field="*{user.ward}"/>
+                            </div>
+                            <div class="payment_infor-address" th:if="${user.address==null}">
+                                <label class="payment_infor-address-label">Địa chỉ</label>
+                                <input class="payment_infor-address-input" type="text" name="address">
+                            </div>
+                            <div class="payment_infor-address" th:if="${user.address!=null}">
+                                <label class="payment_infor-address-label">Địa chỉ</label>
+                                <input class="payment_infor-address-input" type="text" name="address" th:value="${user.address}">
+                            </div>
+                        </div>
+                        <div class="wrap-link-and-button">
+                            <div class="link_cart-2"><a href="">Giỏ hàng</a></div>
+                            <button type="submit">Phương thức thanh toán</button>
+                        </div>
+                        <footer class="container-main-order-left-footer">
+                            <p>Powered by Haravan</p>
+                        </footer>
+                    </div>
+            </div>
+            <div class="container-main-order-right">
+                <div class="container-main-order-right-wrap">
+                    <table class="product">
+                        <tr th:each="cartItem:${shoppingCart.cartItems}" th:object="${shoppingCart}">
+                            <input name="id" th:value="${shoppingCart.id}" type="hidden">
+                            <td class="product-img-and-quantity">
+                                <div class="product-img"><img th:src="@{/productImages/{imageName}(imageName=${cartItem.product.imageName})}" alt=""></div>
+                                <div class="product-quantity" th:text="${cartItem.quantity}"></div>
+                            </td>
+                            <td class="product-name" th:text="${cartItem.product.name}">Từ điển STEAM song ngữ - Nghệ thuật</td>
+                            <td class="product-name-price" th:text="${#numbers.formatDecimal(cartItem.unitPrice, 0, 'COMMA', 0, 'POINT')}+'đ'">31,500đ</td>
+                        </tr>
+                    </table>
+                    <div class="discount_code">
+                        <div class="discount_code-wrap-input">
+                            <input class="discount_code-input" type="text" >
+                            <label class="discount_code-label">Mã giảm giá</label>
+                        </div>
+                        <button>Sử dụng</button>
+                    </div>
+                    <div class="redeem-login-section">
+                        <div class="redeem-login">
+                            <div class="redeem-login-title">
+                                <p>Khách hàng thân thiết</p>
+                                <small>(error_loyalty_is_not_registered)</small>
+                            </div>
+                            <div class="reward-points">
+                                <span><i class="fa-solid fa-crown"></i></span>
+                                <span>Member • 0 điểm thưởng</span>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="total-line-table">
+                        <tr class=" total-line total-line-subtotal">
+                            <td class="total-line-name">Tạm tính</td>
+                            <td class="total-line-price" th:text="${#numbers.formatDecimal(shoppingCart.totalPrice, 0, 'COMMA', 0, 'POINT')}+'đ'">1,500đ</td>
+                        </tr>
+                        <tr class=" total-line total-line-shipping">
+                            <td class="total-line-name">Phí ship</td>
+                            <td class="total-line-price">--</td>
+                        </tr>
+                        <tr class=" total-line total-line-footer">
+                            <td class="total-line-name">Tổng tiền</td>
+                            <td class="total-line-price" th:text="${#numbers.formatDecimal(shoppingCart.totalPrice, 0, 'COMMA', 0, 'POINT')}+'đ'">VNĐ 31,500đ</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+<!-- Hết phần giữa -->
+
+
+</body>
+<!-- import slick slider -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/shop/js/order.js"></script>
+
+</html>

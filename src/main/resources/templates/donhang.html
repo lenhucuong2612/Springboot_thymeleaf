@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+  <link rel="stylesheet" href="/shop/css/lichsugiaodich.css">
+  <link rel="stylesheet" href="/shop/css/main.css">
+  <title>Lịch Sử Giao Dịch</title>
+  <title>Giỏ hàng</title>
+</head>
+
+<body>
+<!-- Phần header -->
+<div id="header">
+  <div th:replace="fragment :: header_top"></div>
+  <div th:replace="fragment :: header_middle"></div>
+  <div class="header_bottom">
+    <div class="title_page">
+      <div class="title_page-overlay"></div>
+      <div class="wrapper">
+        <ul th:replace="fragment::menu">
+
+        </ul>
+        <div th:replace="fragment::title_page-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Hết phần header -->
+<!-- Phần giữa -->
+<div id="container">
+  <div class="wrapper">
+    <header>
+      <div class="header_title">
+        <h2>Tài khoản của bạn</h2>
+      </div>
+    </header>
+    <main>
+      <div id="container">
+        <div class="container-wrap">
+          <div class="container_main">
+            <div class="container_main-left">
+              <div class="information_order">
+                <div class="transaction_history">Lịch sử giao dịch</div>
+              </div>
+              <table border="1px" cellspacing="0" class="order_details">
+                <tr>
+                  <th>Đơn hàng</th>
+                  <th>Ngày</th>
+                  <th>Tình trạng thanh toán </th>
+                  <th>Tình trạng vận chuyển</th>
+                  <th>Tổng </th>
+                  <th>Hủy đơn hàng </th>
+                </tr>
+                <tr th:each="orderList:${orderList}">
+                  <td class="order">
+                    <a  style="color: red" th:href="@{/shop/user/orderDetail/{id}(id=${orderList.id})}" th:text="${orderList.getMaHang()}"></a>
+                  </td>
+                  <td class="date" th:text="${orderList.getOrderDate()}">10/06/2023 10:40:05</td>
+                  <td class="payment_status" th:if="${orderList.accept==false}">Chờ xử lý</td>
+                  <td class="payment_status" th:if="${orderList.accept==true}">Thanh toán khi nhận hàng</td>
+                  <td class="shipping_status" th:if="${orderList.accept==false}">Chờ xử lý</td>
+                  <td class="shipping_status" th:if="${orderList.accept==true}">Đang giao hàng</td>
+                  <td class="totalprice" th:text="${#numbers.formatDecimal(orderList.totalPrice, 0, 'COMMA', 0, 'POINT')}"></td>
+                  <td class="shipping_status" >
+                    <a th:href="@{/shop/order/delete/{id}(id=${orderList.id})}">Hủy đơn hàng</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="container_main-right">
+              <div class="infor_account">Thông tin tài khoản</div>
+              <div class="use"><span th:text="${fullName}"></span></div>
+              <div class="delivery_address">
+                <div><span th:text="${user.department}"></span></div>
+                <div><span th:text="${user.country}"></span></div>
+                <div><span th:text="${user.phoneNumber}"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<!-- Hết phần giữa -->
+<hr class="line">
+<!-- Phần footer -->
+<div th:replace="fragment::footer"></div>
+<!-- Hết phần footer -->
+<!-- Phần btn để click vào sẽ về đầu trang -->
+<div id="backtop"><i class="fa-solid fa-chevron-up"></i></div>
+<!-- Phần form đăng ký đăng nhập -->
+
+<div class="overlay d-none"></div>
+
+</body>
+<!-- import slick slider -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="/shop/js/index.js"></script>
+
+</html>
